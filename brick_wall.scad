@@ -1,11 +1,9 @@
 WIDTH = 48;
 HEIGHT = 23.8;
 DEPTH = 24;
-
-GAP = 5;
-
-ROWS = 10;
-COLS = 10;
+GAP = 10;
+ROWS = 29;
+COLS = 7;
 
 FRAMES_Z_MAX = [30, 50, 70, 90, 110];
 
