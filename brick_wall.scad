@@ -1,16 +1,18 @@
 WIDTH = 48;
 HEIGHT = 23.8;
 DEPTH = 24;
-GAP = 10;
+GAP = 4;
 ROWS = 29;
 COLS = 7;
+GAP_DEPTH = 0.75 * DEPTH;
 
 FRAMES_Z_MAX = [30, 50, 70, 90, 110];
 
 Z_MAX_ANIMATION_STEP = 200;
-Z_MAX_ANIMATION_OFFSET = 30;
+Z_MAX_ANIMATION_OFFSET = 0;
 
-max_z = $t * Z_MAX_ANIMATION_STEP + Z_MAX_ANIMATION_OFFSET;
+time = $t;
+max_z = time * Z_MAX_ANIMATION_STEP + Z_MAX_ANIMATION_OFFSET;
 
 for (i = [0:ROWS]) {
     for (j = [0:COLS]) {
@@ -26,5 +28,14 @@ for (i = [0:ROWS]) {
 function z(row, col) = min(max_z, 20. * sqrt(pow((col - COLS/2.), 2) + pow((row - ROWS/2.), 2)));
 
 module brick() {
-    cube([WIDTH, HEIGHT, DEPTH]);
+    color("red")
+         cube([WIDTH, DEPTH, HEIGHT]);
+    gap_gemisou();
+}
+
+module gap_gemisou() {
+    translate([WIDTH, 0., 0.])
+        cube([GAP, GAP_DEPTH, HEIGHT + GAP]);
+    translate([0., 0., HEIGHT])
+        cube([WIDTH, GAP_DEPTH, GAP]);
 }
