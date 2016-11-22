@@ -1,5 +1,6 @@
 // everything in cm
-
+// note that variable names x/y are used for columns/rows of bricks and z is
+// used for breathing direction, but this is not the axis of OpenSCAD
 
 // dimensions of brick
 WIDTH = 10;
@@ -21,7 +22,7 @@ ROWS = ceil(TOTAL_HEIGHT / (HEIGHT + GAP));
 COLS = ceil(TOTAL_WIDTH/ (WIDTH + GAP));
 
 // how to deal with breathing shifts (eg. print to allow easier measuring)
-Z_SHIFT_MODE = "shift";   // on of stdout, label, shift
+Z_SHIFT_MODE = "all";   // on of stdout, label, shift, all
 
 // this calculation is just and approximation and correct by the factor
 MAX_BREATH_DEPTH = 1. * GAP_DEPTH * (COLS-2)/2.;
@@ -79,7 +80,7 @@ function z(x, y) =
 
 module print_to_stdout() {
     // this is probably only helpful if post processed and converted to CSV or so
-    if (Z_SHIFT_MODE == "stdout") {
+    if (Z_SHIFT_MODE == "stdout" || Z_SHIFT_MODE == "all") {
         echo(str("time=", time));
         for (i = [0:ROWS-1])
             echo(str("row=", i, ": ", str([for (j = [0:COLS-1]) (z(i, j))])));
@@ -89,15 +90,14 @@ module print_to_stdout() {
 
 module brick(x, y) {
     z_shift = z(x, y);
-    translate([x, Z_SHIFT_MODE == "shift" ? z_shift : 0., y]) {
+    translate([x, Z_SHIFT_MODE == "shift" || Z_SHIFT_MODE == "all" ? z_shift : 0., y]) {
         translate([-WIDTH/2., 0., 0.]) {
             color("red")
                  cube([WIDTH, DEPTH, HEIGHT]);
             gap_gemisou();
         }
 
-
-        if (Z_SHIFT_MODE == "label" && z_shift > 0.)
+        if ((Z_SHIFT_MODE == "label" || Z_SHIFT_MODE == "all") && z_shift > 0.)
             zlabel(z_shift);
     }
 }
