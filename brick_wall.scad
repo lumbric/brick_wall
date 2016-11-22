@@ -19,11 +19,8 @@ GAP_DEPTH = 0.75 * DEPTH;
 ROWS = ceil(TOTAL_HEIGHT / (HEIGHT + GAP));
 COLS = ceil(TOTAL_WIDTH/ (WIDTH + GAP));
 
-echo("rows=", ROWS);
-echo("cols=", COLS);
-
 // if enabled prints breathing shifts to allow easier measuring
-PRINT_Z_SHIFTS = false;
+PRINT_Z_SHIFTS = true;
 
 MAX_BREATH_DEPTH = 0.9 * GAP_DEPTH * (COLS-1)/2.;
 
@@ -62,7 +59,9 @@ function z(row, col) =
 
 
 if (PRINT_Z_SHIFTS) {
-    echo(str("time=", time)
+    echo(str("time=", time));
+    echo(str("rows=", ROWS));
+    echo(str("cols=", COLS));
     for (i = [0:ROWS-1])
         echo(str("row=", i, ": ", str([for (j = [0:COLS-1]) (z(i, j))])));
 }
