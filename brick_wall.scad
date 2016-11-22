@@ -1,7 +1,7 @@
 // everything in cm
 
 //
-WIDTH = 24;
+WIDTH = 10;
 HEIGHT = 7;
 DEPTH = 6;
 
@@ -12,7 +12,8 @@ DOOR_FRAME = 30.;
 TOTAL_HEIGHT = 249.4;
 TOTAL_WIDTH = 167.0;
 
-GAP = 4;
+GAP = 1;
+GAP_DEPTH = 5.; // approx. 0.75 * DEPTH;
 GAP_DEPTH = 0.75 * DEPTH;
 
 ROWS = ceil(TOTAL_HEIGHT / (HEIGHT + GAP));
@@ -21,8 +22,10 @@ COLS = ceil(TOTAL_WIDTH/ (WIDTH + GAP));
 echo("rows=", ROWS);
 echo("cols=", COLS);
 
+// if enabled prints breathing shifts to allow easier measuring
+PRINT_Z_SHIFTS = false;
 
-MAX_BREATH_DEPTH = 0.9 * GAP_DEPTH * (COLS-1)/2. * 2;
+MAX_BREATH_DEPTH = 0.9 * GAP_DEPTH * (COLS-1)/2.;
 
 time = $t;  // a value between 0 and 1, represents breathing state
 
@@ -30,20 +33,6 @@ time = $t;  // a value between 0 and 1, represents breathing state
 
 door();
 wall();
-
-
-module wall(){
-    translate([-(COLS+0.5) * (GAP + WIDTH)/2., 0., 0.])
-        for (i = [0:ROWS-1]) {
-            for (j = [0:COLS-1]) {
-                translate([
-                        j * (WIDTH + GAP) + 0.5 * WIDTH * (i % 2),
-                        z(i, j),
-                        i * (HEIGHT + GAP)])
-                    brick();
-            }
-        }
-}
 
 // old function with circle function
 //function z(row, col) = max_z +
@@ -72,6 +61,11 @@ function z(row, col) =
     time * MAX_BREATH_DEPTH * (pow(base, -pow(dist(row, col)/max_dist, 2) - 1./base));
 
 
+if (PRINT_Z_SHIFTS) {
+    echo(str("time=", time)
+    for (i = [0:ROWS-1])
+        echo(str("row=", i, ": ", str([for (j = [0:COLS-1]) (z(i, j))])));
+}
 
 
 module brick() {
@@ -87,6 +81,20 @@ module gap_gemisou() {
         cube([GAP, GAP_DEPTH, HEIGHT + GAP]);
     translate([0., DEPTH - GAP_DEPTH, HEIGHT])
         cube([WIDTH, GAP_DEPTH, GAP]);
+}
+
+
+module wall(){
+    translate([-(COLS+0.5) * (GAP + WIDTH)/2., 0., 0.])
+        for (i = [0:ROWS-1]) {
+            for (j = [0:COLS-1]) {
+                translate([
+                        j * (WIDTH + GAP) + 0.5 * WIDTH * (i % 2),
+                        z(i, j),
+                        i * (HEIGHT + GAP)])
+                    brick();
+            }
+        }
 }
 
 
