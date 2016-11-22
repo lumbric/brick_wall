@@ -13,7 +13,7 @@ png:
 		--projection=ortho\
 		--camera=100,-400,100,0,0,0 \
 		--autocenter \
-		-D Z_LABEL=$(Z_LABEL) \
+		-D 'Z_LABEL=$(Z_LABEL)' \
 		-D wall_number=$$t ; \
 	done
 

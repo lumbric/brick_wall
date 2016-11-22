@@ -47,15 +47,19 @@ time = (wall_number != -1) ?
     wall_number / (NUMBER_OF_WALLS - 1) :
     $t;
 
+door_shift = -(HEIGHT + GAP) * (ROWS-1)/2. - GAP;
 
 echo(str("total number of rows =", ROWS));
 echo(str("total number of cols=", COLS));
+
 
 
 door();
 wall();
 //brick();   // just for testing
 print_to_stdout();
+title();
+
 
 
 
@@ -90,6 +94,13 @@ module print_to_stdout() {
     }
 }
 
+module title() {
+    msg = (wall_number != -1) ? str(Z_LABEL, ", wall nr=", wall_number) : str(Z_LABEL);
+    translate([0., -DOOR_FRAME, DOOR_HEIGHT + door_shift + DOOR_FRAME/2.])
+        rotate([90., 0., 0.])
+            text(str(msg),
+                    halign="center", valign="center");
+}
 
 module brick(x, y) {
     z_shift = z(x, y);
@@ -119,14 +130,16 @@ module zlabel(label) {
 
 module gap_gemisou() {
     // name hint: "gemi sou! (greek) = fill yourself!"
-    translate([-GAP, DEPTH - GAP_DEPTH, -GAP])
-        cube([GAP, GAP_DEPTH, HEIGHT + GAP]);
-    translate([0., DEPTH - GAP_DEPTH, -GAP])
-        cube([WIDTH, GAP_DEPTH, GAP]);
+    color("grey") {
+        translate([-GAP, DEPTH - GAP_DEPTH, -GAP])
+            cube([GAP, GAP_DEPTH, HEIGHT + GAP]);
+        translate([0., DEPTH - GAP_DEPTH, -GAP])
+            cube([WIDTH, GAP_DEPTH, GAP]);
+    }
 }
 
 
-module wall(){
+module wall() {
     translate([0., 0., 0.])
         for (i = [0:ROWS-1]) {
             for (j = [0:COLS-1]) {
@@ -140,7 +153,7 @@ module wall(){
 
 
 module door() {
-    translate([-DOOR_WIDTH/2 - DOOR_FRAME, -DOOR_FRAME, -(HEIGHT + GAP) * (ROWS-1)/2. - GAP])
+    translate([-DOOR_WIDTH/2 - DOOR_FRAME, -DOOR_FRAME, door_shift])
         color("black")
         difference() {
             cube([DOOR_WIDTH + 2*DOOR_FRAME, DOOR_FRAME, DOOR_HEIGHT + DOOR_FRAME]);
