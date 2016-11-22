@@ -48,16 +48,17 @@ function dist(x, y) = sqrt(x*x + y*y);
 
 
 base = 7;
-max_dist = min((COLS - 2) * (GAP + WIDTH) / 2., (ROWS - 2) * (GAP + HEIGHT)/ 2.);
+max_x_dist = (COLS - 2) * (GAP + WIDTH) / 2.;
+max_y_dist = (ROWS - 2) * (GAP + HEIGHT)/ 2.;
 
 // wow this is not z... just thought this must be z... actually it is y...
 // Z is used for depth!
 //
 // this is something like a 2D Gaussian curve
 function z(x, y) =
-    dist(x, y) > max_dist ?
+    dist(x/max_x_dist, y/max_y_dist) > 1 ?
     0 :
-    time * MAX_BREATH_DEPTH * (pow(base, -pow(dist(x, y)/max_dist, 2) - 1./base));
+    time * MAX_BREATH_DEPTH * (pow(base, -pow(dist(x/max_x_dist, y/max_y_dist), 2) - 1./base));
 
 
 module print_to_stdout() {
