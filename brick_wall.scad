@@ -15,8 +15,7 @@ TOTAL_HEIGHT = 203;
 TOTAL_WIDTH = 99;
 
 GAP = 1;
-GAP_DEPTH = 5.; // approx. 0.75 * DEPTH;
-GAP_DEPTH = 0.75 * DEPTH;
+GAP_DEPTH = DEPTH - GAP;
 
 ROWS = ceil(TOTAL_HEIGHT / (HEIGHT + GAP));
 COLS = ceil(TOTAL_WIDTH/ (WIDTH + GAP));
@@ -24,7 +23,11 @@ COLS = ceil(TOTAL_WIDTH/ (WIDTH + GAP));
 // how to deal with breathing shifts (eg. print to allow easier measuring)
 Z_SHIFT_MODE = "shift";   // on of stdout, label, shift
 
-MAX_BREATH_DEPTH = 0.9 * GAP_DEPTH * (COLS-1)/2.;
+// this calculation is just and approximation and correct by the factor
+MAX_BREATH_DEPTH = 1. * GAP_DEPTH * (COLS-2)/2.;
+
+// this makes the hill more steep if the value is higher
+BREATHING_BASE = 25;
 
 time = $t;  // a value between 0 and 1, represents breathing state
 
@@ -35,6 +38,7 @@ echo(str("total number of cols=", COLS));
 
 door();
 wall();
+//brick();   // just for testing
 print_to_stdout();
 
 
@@ -47,7 +51,6 @@ function dist(x, y) = sqrt(x*x + y*y);
         //pow(((row - ROWS/2)* (HEIGHT+ GAP)), 2)
 
 
-base = 7;
 max_x_dist = (COLS - 2) * (GAP + WIDTH) / 2.;
 max_y_dist = (ROWS - 3) * (GAP + HEIGHT)/ 2.;
 
@@ -58,7 +61,8 @@ max_y_dist = (ROWS - 3) * (GAP + HEIGHT)/ 2.;
 function z(x, y) =
     dist(x/max_x_dist, y/max_y_dist) > 1 ?
     0 :
-    time * MAX_BREATH_DEPTH * (pow(base, -pow(dist(x/max_x_dist, y/max_y_dist), 2) - 1./base));
+    time * MAX_BREATH_DEPTH * (pow(BREATHING_BASE, -pow(dist(x/max_x_dist, y/max_y_dist), 2)
+                - 1./BREATHING_BASE));
 
 
 module print_to_stdout() {
@@ -97,9 +101,9 @@ module zlabel(label) {
 
 module gap_gemisou() {
     // name hint: "gemi sou! (greek) = fill yourself!"
-    translate([WIDTH, DEPTH - GAP_DEPTH, 0.])
+    translate([-GAP, DEPTH - GAP_DEPTH, -GAP])
         cube([GAP, GAP_DEPTH, HEIGHT + GAP]);
-    translate([0., DEPTH - GAP_DEPTH, HEIGHT])
+    translate([0., DEPTH - GAP_DEPTH, -GAP])
         cube([WIDTH, GAP_DEPTH, GAP]);
 }
 
@@ -118,7 +122,7 @@ module wall(){
 
 
 module door() {
-    translate([-DOOR_WIDTH/2 - DOOR_FRAME, -DOOR_FRAME, -(HEIGHT + GAP) * (ROWS-1)/2.])
+    translate([-DOOR_WIDTH/2 - DOOR_FRAME, -DOOR_FRAME, -(HEIGHT + GAP) * (ROWS-1)/2. - GAP])
         color("black")
         difference() {
             cube([DOOR_WIDTH + 2*DOOR_FRAME, DOOR_FRAME, DOOR_HEIGHT + DOOR_FRAME]);
