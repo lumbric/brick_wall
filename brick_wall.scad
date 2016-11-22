@@ -7,6 +7,8 @@ WIDTH = 10;
 HEIGHT = 6;
 DEPTH = 8;
 
+ENABLE_DOOR = false;
+
 DOOR_HEIGHT = 202.5;
 DOOR_WIDTH = 90.;
 DOOR_FRAME = 30.;
@@ -53,8 +55,8 @@ echo(str("total number of rows =", ROWS));
 echo(str("total number of cols=", COLS));
 
 
-
-door();
+if (ENABLE_DOOR)
+    door();
 wall();
 //brick();   // just for testing
 print_to_stdout();
