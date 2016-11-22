@@ -1,16 +1,18 @@
 // everything in cm
 
-//
-WIDTH = 10;
-HEIGHT = 7;
-DEPTH = 6;
 
-DOOR_HEIGHT = 242.;
-DOOR_WIDTH = 152.;
+// dimensions of brick
+WIDTH = 10;
+HEIGHT = 6;
+DEPTH = 8;
+
+DOOR_HEIGHT = 202.5;
+DOOR_WIDTH = 90.;
 DOOR_FRAME = 30.;
 
-TOTAL_HEIGHT = 249.4;
-TOTAL_WIDTH = 167.0;
+// total dimensions of wall
+TOTAL_HEIGHT = 203;
+TOTAL_WIDTH = 99;
 
 GAP = 1;
 GAP_DEPTH = 5.; // approx. 0.75 * DEPTH;
@@ -20,12 +22,15 @@ ROWS = ceil(TOTAL_HEIGHT / (HEIGHT + GAP));
 COLS = ceil(TOTAL_WIDTH/ (WIDTH + GAP));
 
 // how to deal with breathing shifts (eg. print to allow easier measuring)
-Z_SHIFT_MODE = "label";   // on of stdout, label, shift
+Z_SHIFT_MODE = "shift";   // on of stdout, label, shift
 
 MAX_BREATH_DEPTH = 0.9 * GAP_DEPTH * (COLS-1)/2.;
 
-time = 1.; //$t;  // a value between 0 and 1, represents breathing state
+time = $t;  // a value between 0 and 1, represents breathing state
 
+
+echo(str("total number of rows =", ROWS));
+echo(str("total number of cols=", COLS));
 
 
 door();
@@ -59,8 +64,6 @@ module print_to_stdout() {
     // this is probably only helpful if post processed and converted to CSV or so
     if (Z_SHIFT_MODE == "stdout") {
         echo(str("time=", time));
-        echo(str("rows=", ROWS));
-        echo(str("cols=", COLS));
         for (i = [0:ROWS-1])
             echo(str("row=", i, ": ", str([for (j = [0:COLS-1]) (z(i, j))])));
     }
