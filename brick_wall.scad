@@ -19,8 +19,8 @@ GAP_DEPTH = 0.75 * DEPTH;
 ROWS = ceil(TOTAL_HEIGHT / (HEIGHT + GAP));
 COLS = ceil(TOTAL_WIDTH/ (WIDTH + GAP));
 
-// if enabled prints breathing shifts to allow easier measuring
-PRINT_Z_SHIFTS = true;
+// how to deal with breathing shifts (eg. print to allow easier measuring)
+Z_SHIFT_MODE = "label";   // on of stdout, label, shift
 
 MAX_BREATH_DEPTH = 0.9 * GAP_DEPTH * (COLS-1)/2.;
 
@@ -30,6 +30,7 @@ time = $t;  // a value between 0 and 1, represents breathing state
 
 door();
 wall();
+//brick();
 
 // old function with circle function
 //function z(row, col) = max_z +
@@ -58,7 +59,7 @@ function z(row, col) =
     time * MAX_BREATH_DEPTH * (pow(base, -pow(dist(row, col)/max_dist, 2) - 1./base));
 
 
-if (PRINT_Z_SHIFTS) {
+if (Z_SHIFT_MODE == "stdout") {
     echo(str("time=", time));
     echo(str("rows=", ROWS));
     echo(str("cols=", COLS));
@@ -68,9 +69,21 @@ if (PRINT_Z_SHIFTS) {
 
 
 module brick() {
-    color("red")
-         cube([WIDTH, DEPTH, HEIGHT]);
-    gap_gemisou();
+    translate([-WIDTH/2., 0., 0.]) {
+        color("red")
+             cube([WIDTH, DEPTH, HEIGHT]);
+        gap_gemisou();
+    }
+
+    //zlabel(0.234234);
+}
+
+
+module zlabel(label) {
+    translate([0., 0., HEIGHT/2.])
+    rotate([90., 0., 0.])
+         text(str(round(label * 100) / 100.),
+                 size=0.3 * HEIGHT, halign="center", valign="center");
 }
 
 
@@ -91,7 +104,7 @@ module wall(){
                         j * (WIDTH + GAP) + 0.5 * WIDTH * (i % 2),
                         z(i, j),
                         i * (HEIGHT + GAP)])
-                    brick();
+                    brick(z(i, j));
             }
         }
 }
