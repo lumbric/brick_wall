@@ -49,7 +49,7 @@ function dist(x, y) = sqrt(x*x + y*y);
 
 base = 7;
 max_x_dist = (COLS - 2) * (GAP + WIDTH) / 2.;
-max_y_dist = (ROWS - 2) * (GAP + HEIGHT)/ 2.;
+max_y_dist = (ROWS - 3) * (GAP + HEIGHT)/ 2.;
 
 // wow this is not z... just thought this must be z... actually it is y...
 // Z is used for depth!
@@ -90,7 +90,7 @@ module brick(x, y) {
 module zlabel(label) {
     translate([0., 0., HEIGHT/2.])
     rotate([90., 0., 0.])
-         text(str(round(label * 100) / 100.),
+         text(str(round(label * 10) / 10.),
                  size=0.3 * HEIGHT, halign="center", valign="center");
 }
 
