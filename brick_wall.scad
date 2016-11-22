@@ -144,7 +144,7 @@ module wall() {
         for (i = [0:ROWS-1]) {
             for (j = [0:COLS-1]) {
                 brick(
-                        x=(j + 0.5 * (i % 2)) * (WIDTH + GAP) -  (COLS-1) * (WIDTH + GAP)/2.,
+                        x=(j + 0.5 * (i % 2) - 0.25) * (WIDTH + GAP) -  (COLS-1) * (WIDTH + GAP)/2.,
                         y=(HEIGHT + GAP) * (i - (ROWS-1)/2.)
                 );
             }
