@@ -29,7 +29,19 @@ MAX_BREATH_DEPTH = 1. * GAP_DEPTH * (COLS-2)/2.;
 // this makes the hill more steep if the value is higher
 BREATHING_BASE = 25;
 
-time = $t;  // a value between 0 and 1, represents breathing state
+// how many walls do we want including the flat one?
+NUMBER_OF_WALLS = 4;
+
+
+// ---------------------------------------------------------------------------
+
+// time is a value between 0 and 1, represents breathing state
+// Set via  0 <= wall_number <= NUMBER_OF_WALLS - 1 using -D as command line parameter
+// or if not set can be used for interactive animation in OpenSCAD
+wall_number = -1;
+time = (wall_number != -1) ?
+    wall_number / (NUMBER_OF_WALLS - 1) :
+    $t;
 
 
 echo(str("total number of rows =", ROWS));
