@@ -108,7 +108,7 @@ module brick(x, y) {
     z_shift = z(x, y);
     translate([x, Z_SHIFT_MODE == "shift" || Z_SHIFT_MODE == "all" ? z_shift : 0., y]) {
         translate([-WIDTH/2., 0., 0.]) {
-            color("red")
+            color("white")
                  cube([WIDTH, DEPTH, HEIGHT]);
             gap_gemisou();
         }
@@ -123,10 +123,11 @@ module brick(x, y) {
 
 
 module zlabel(label) {
-    translate([0., 0., HEIGHT/2.])
-    rotate([90., 0., 0.])
-         text(str(round(label * 10) / 10.),
-                 size=0.3 * HEIGHT, halign="center", valign="center");
+    color("black")
+        translate([0., 0., HEIGHT/2.])
+        rotate([90., 0., 0.])
+             text(str(round(label * 10) / 10.),
+                     size=0.3 * HEIGHT, halign="center", valign="center");
 }
 
 
