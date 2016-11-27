@@ -24,3 +24,7 @@ png_relative_labels:
 png_absolute_labels: export Z_LABEL = "absolute"
 png_absolute_labels:
 	$(MAKE) png
+
+png_absolute_labels: export Z_LABEL = "relative_right"
+png_absolute_labels:
+	$(MAKE) png
