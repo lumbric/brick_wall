@@ -27,7 +27,7 @@ COLS = ceil(TOTAL_WIDTH/ (WIDTH + GAP));
 Z_SHIFT_MODE = "all";   // one of stdout, label, shift, all
 
 // "relative" means relative to lower left brick
-Z_LABEL = "relative";  // one of absolute, relative
+Z_LABEL = "relative_right";  // one of absolute, relative
 
 // this calculation is just and approximation and correct by the factor
 MAX_BREATH_DEPTH = 1. * GAP_DEPTH * (COLS-2)/2.;
@@ -116,8 +116,10 @@ module brick(x, y) {
         if ((Z_SHIFT_MODE == "label" || Z_SHIFT_MODE == "all") && z_shift > 0.)
             if (Z_LABEL == "absolute")
                 zlabel(z_shift);
-            else
+            else if (Z_LABEL == "relative")
                 zlabel(z_shift - z(x - (WIDTH + GAP)/2., y - HEIGHT - GAP));
+            else if (Z_LABEL == "relative_right")
+                zlabel(z_shift - z(x + (WIDTH + GAP), y));
     }
 }
 
