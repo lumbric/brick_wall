@@ -113,13 +113,18 @@ module brick(x, y) {
             gap_gemisou();
         }
 
-        if ((Z_SHIFT_MODE == "label" || Z_SHIFT_MODE == "all") && z_shift > 0.)
-            if (Z_LABEL == "absolute")
-                zlabel(z_shift);
-            else if (Z_LABEL == "relative")
-                zlabel(z_shift - z(x - (WIDTH + GAP)/2., y - HEIGHT - GAP));
-            else if (Z_LABEL == "relative_right")
-                zlabel(z_shift - z(x + (WIDTH + GAP), y));
+        if (Z_SHIFT_MODE == "label" || Z_SHIFT_MODE == "all") {
+            labeltxt =
+            Z_LABEL == "absolute" ?
+                z_shift :
+                (Z_LABEL == "relative" ?
+                    z_shift - z(x - (WIDTH + GAP)/2., y - HEIGHT - GAP) :
+                    // Z_LABEL == "relative_right"
+                    z_shift - z(x + (WIDTH + GAP), y));
+
+            if (labeltxt != 0)
+                zlabel(labeltxt);
+        }
     }
 }
 
